@@ -447,7 +447,8 @@ public final class Tessellator {
               tanMin = tan;
             }
           } else if ((tan < tanMin || (tan == tanMin && p.getX() > connection.getX()))
-              && isLocallyInside(p, holeNode)) {
+              && isLocallyInside(p, holeNode)
+              && checkNonCollinearLines(p, holeNode)) {
             connection = p;
             tanMin = tan;
           }
@@ -456,6 +457,14 @@ public final class Tessellator {
       }
     }
     return connection;
+  }
+
+  private static boolean checkNonCollinearLines(final Node a, final Node b) {
+    return (area(a.previous.getX(), a.previous.getY(), a.getX(), a.getY(), b.getX(), b.getY()) != 0
+            && area(a.getX(), a.getY(), b.getX(), b.getY(), b.next.getX(), b.next.getY()) != 0)
+            || (area(a.next.getX(), a.next.getY(), a.getX(), a.getY(), b.getX(), b.getY()) != 0
+            && area(a.getX(), a.getY(), b.getX(), b.getY(), b.previous.getX(), b.previous.getY())
+            != 0);
   }
 
   /** Check if the provided vertex is in the polygon and return it * */
