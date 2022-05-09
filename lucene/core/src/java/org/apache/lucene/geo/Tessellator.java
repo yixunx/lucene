@@ -85,6 +85,22 @@ public final class Tessellator {
   // No Instance:
   private Tessellator() {}
 
+  public static String printNodes(Node outerNode) {
+    Node current = outerNode;
+    Node pointer = outerNode.next;
+    String description = nodeDescription(current);
+    while (!pointer.equals(current)) {
+      description = description + "\n" + nodeDescription(pointer);
+      pointer = pointer.next;
+    }
+    return description;
+  }
+
+  private static String nodeDescription(Node node) {
+    return node.toString() + " (" + node.getX() + ", " + node.getY() + ", isNextEdgeFromPolygon="
+            + node.isNextEdgeFromPolygon + ")";
+  }
+
   public static List<Triangle> tessellate(final Polygon polygon, boolean checkSelfIntersections) {
     // Attempt to establish a doubly-linked list of the provided shell points (should be CCW, but
     // this will correct);
